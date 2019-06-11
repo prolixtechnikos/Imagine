@@ -26,7 +26,7 @@ abstract class AbstractImage implements ImageInterface
      *
      * @return ImageInterface
      */
-    public function thumbnail(BoxInterface $size, $mode = ImageInterface::THUMBNAIL_INSET, $filter = ImageInterface::FILTER_UNDEFINED)
+    public function thumbnail(BoxInterface $size, $mode = ImageInterface::THUMBNAIL_INSET, $filter = ImageInterface::FILTER_UNDEFINED, $border = false)
     {
         if ($mode !== ImageInterface::THUMBNAIL_INSET &&
             $mode !== ImageInterface::THUMBNAIL_OUTBOUND) {
@@ -68,7 +68,7 @@ abstract class AbstractImage implements ImageInterface
             $thumbnail->crop(new Point(
                 max(0, round(($imageSize->getWidth() - $size->getWidth()) / 2)),
                 max(0, round(($imageSize->getHeight() - $size->getHeight()) / 2))
-            ), $size);
+            ), $size, $border);
         } else {
             if (!$imageSize->contains($size)) {
                 $imageSize = $imageSize->scale($ratio);
