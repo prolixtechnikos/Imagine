@@ -104,7 +104,7 @@ final class Image extends AbstractImage
      *
      * @return ImageInterface
      */
-    final public function crop(PointInterface $start, BoxInterface $size)
+    final public function crop(PointInterface $start, BoxInterface $size, $border = false)
     {
         if (!$start->in($this->getSize())) {
             throw new OutOfBoundsException('Crop coordinates must start at minimum 0, 0 position from top  left corner, crop height and width must be positive integers and must not exceed the current image borders');
@@ -118,13 +118,15 @@ final class Image extends AbstractImage
         if (false === imagecopy($dest, $this->resource, 0, 0, $start->getX(), $start->getY(), $width, $height)) {
             throw new RuntimeException('Image crop operation failed');
         }
-        $dest = $this->putBorder($dest, 10, $width, $height);
-        $mi = imagecreatetruecolor($width+6, $height+6);
-        $transparent = imagecolorallocate($mi, 186, 191, 197);
-        imagefill($mi, 0, 0, $transparent);
-        imagecopy($mi, $dest, 3,3,0,0, $width, $height);
-        $dest = $mi;
-        $dest = $this->putBorder($dest, 10, $width+6, $height+6);
+        if($border){
+            $dest = $this->putBorder($dest, 10, $width, $height);
+            $mi = imagecreatetruecolor($width+6, $height+6);
+            $transparent = imagecolorallocate($mi, 186, 191, 197);
+            imagefill($mi, 0, 0, $transparent);
+            imagecopy($mi, $dest, 3,3,0,0, $width, $height);
+            $dest = $mi;
+            $dest = $this->putBorder($dest, 10, $width+6, $height+6);
+        }
         imagedestroy($this->resource);
 
         $this->resource = $dest;
