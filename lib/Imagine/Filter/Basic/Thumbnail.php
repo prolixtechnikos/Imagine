@@ -52,7 +52,7 @@ class Thumbnail implements FilterInterface
         $this->size = $size;
         $this->mode = $mode;
         $this->filter = $filter;
-        $this->border = border;
+        $this->border = $border;
     }
 
     /**
